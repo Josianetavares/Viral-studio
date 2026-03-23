@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Viral Studio AI</title>
+  <style>
+    :root {
+      --bg: #07070c;
+      --bg-soft: #0e1020;
+      --card: rgba(18, 22, 43, 0.72);
+      --card-2: rgba(12, 16, 35, 0.88);
+      --stroke: rgba(110, 133, 255, 0.18);
+      --text: #f4f7ff;
+      --muted: #aeb7d1;
+      --primary: #7c5cff;
+      --secondary: #00d9ff;
+      --accent: #ff4fd8;
+      --success: #3de0a3;
+      --warning: #ffb648;
+      --shadow: 0 20px 80px rgba(0, 0, 0, 0.42);
+      --radius: 22px;
+      --radius-lg: 30px;
+      --max: 1280px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124, 92, 255, 0.24), transparent 25%),
+        radial-gradient(circle at top right, rgba(0, 217, 255, 0.18), transparent 24%),
+        radial-gradient(circle at bottom center, rgba(255, 79, 216, 0.14), transparent 22%),
+        linear-gradient(180deg, #05060b 0%, #080a14 50%, #05060b 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+
+    .glow {
+      position: fixed;
+      inset: auto;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.16;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow.one { top: 90px; left: -60px; background: var(--primary); }
+    .glow.two { top: 20%; right: -80px; background: var(--secondary); }
+    .glow.three { bottom: 60px; left: 30%; background: var(--accent); }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      width: min(calc(100% - 28px), var(--max));
+      margin: 0 auto;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 14px;
+      backdrop-filter: blur(18px);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      box-shadow: 0 0 16px rgba(0, 217, 255, 0.7);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(5, 6, 12, 0.56);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(124,92,255,.22), rgba(0,217,255,.22));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 0 30px rgba(124,92,255,0.18);
+      font-size: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .25s ease;
+    }
+
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+
+    .actions { display: flex; gap: 10px; align-items: center; }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      border-radius: 16px;
+      padding: 14px 20px;
+      font-weight: 700;
+      transition: transform .2s ease, box-shadow .25s ease, opacity .25s ease, background .25s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 12px 30px rgba(124, 92, 255, 0.28);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .hero {
+      padding: 64px 0 30px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 5vw, 68px);
+      line-height: 0.98;
+      margin: 18px 0 16px;
+      letter-spacing: -1.8px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #ffffff, #88dfff, #f7c0ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.65;
+      max-width: 720px;
+      margin: 0 0 26px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .stat-card, .panel-card, .feature-card, .plan, .faq-item, .dashboard-card, .form-card, .template-card, .stage-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+    }
+
+    .stat-card {
+      padding: 18px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .stat-card span { color: var(--muted); font-size: 14px; }
+
+    .hero-card {
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(13,18,39,.92), rgba(8,11,23,.86));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, .45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(124,92,255,.12), transparent 36%, rgba(0,217,255,.10));
+      pointer-events: none;
+    }
+
+    .screen-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .traffic {
+      display: flex;
+      gap: 8px;
+    }
+
+    .traffic i {
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+    }
+
+    .screen-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .mini-card {
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 16px;
+      min-height: 146px;
+    }
+
+    .mini-title {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .line {
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(124,92,255,.72), rgba(0,217,255,.55));
+      margin-bottom: 10px;
+      opacity: .88;
+    }
+
+    .line.sm { width: 52%; }
+    .line.md { width: 74%; }
+    .line.lg { width: 94%; }
+    .line.alt { background: linear-gradient(90deg, rgba(255,79,216,.62), rgba(124,92,255,.4)); }
+
+    section { padding: 34px 0; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      margin: 8px 0;
+      letter-spacing: -1px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 720px;
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card, .panel-card, .dashboard-card, .form-card, .template-card, .stage-card, .plan, .faq-item {
+      padding: 20px;
+    }
+
+    .icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, rgba(124,92,255,.24), rgba(0,217,255,.14));
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 22px;
+    }
+
+    .feature-card h3, .panel-card h3, .dashboard-card h3, .form-card h3, .template-card h3, .stage-card h3, .plan h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .feature-card p, .panel-card p, .dashboard-card p, .form-card p, .template-card p, .stage-card p, .plan p, .faq-item p {
+      color: var(--muted);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .tag {
+      font-size: 13px;
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .stage-card small {
+      color: var(--secondary);
+      font-weight: 700;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+
+    .dashboard-preview {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 18px;
+      margin-top: 8px;
+    }
+
+    .sidebar {
+      background: var(--card-2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 26px;
+      padding: 18px;
+      min-height: 680px;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar .menu-title {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 18px 0 10px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: 8px;
+      border: 1px solid transparent;
+    }
+
+    .menu-item.active,
+    .menu-item:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.06);
+    }
+
+    .dashboard-main {
+      display: grid;
+      gap: 16px;
+    }
+
+    .dashboard-top {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 16px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .kpi {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .kpi > div {
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+    }
+
+    .kpi strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .pill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(61,224,163,.13);
+      color: #8df7cf;
+      border: 1px solid rgba(61,224,163,.22);
+      white-space: nowrap;
+    }
+
+    .pill.warning {
+      background: rgba(255,182,72,.12);
+      color: #ffd08f;
+      border-color: rgba(255,182,72,.22);
+    }
+
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .input, .select, .textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 14px 15px;
+      outline: none;
+    }
+
+    .textarea { min-height: 150px; resize: vertical; }
+
+    .input::placeholder, .textarea::placeholder { color: #7f89a8; }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .templates {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .template-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 170px;
+    }
+
+    .template-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -20% -20% auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,92,255,.34), transparent 60%);
+    }
+
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .plan.featured {
+      border: 1px solid rgba(124,92,255,0.45);
+      transform: translateY(-6px);
+      box-shadow: 0 18px 60px rgba(124,92,255,0.18);
+    }
+
+    .price {
+      font-size: 40px;
+      font-weight: 900;
+      margin: 10px 0 4px;
+      letter-spacing: -1px;
+    }
+
+    .plan ul {
+      padding: 0;
+      margin: 18px 0 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+    }
+
+    .plan li::before {
+      content: "✓";
+      color: var(--success);
+      margin-right: 10px;
+      font-weight: 900;
+    }
+
+    .faq {
+      display: grid;
+      gap: 14px;
+    }
+
+    .faq-item h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .footer {
+      padding: 28px 0 42px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr .8fr .8fr;
+      gap: 18px;
+    }
+
+    .muted { color: var(--muted); }
+
+    .mobile-toggle {
+      display: none;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      cursor: pointer;
+    }
+
+    .mobile-menu {
+      display: none;
+      padding-bottom: 14px;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 14px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+    }
+
+    .mobile-menu a:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+
+    .separator {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      margin: 8px 0 2px;
+    }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .dashboard-top,
+      .editor-grid,
+      .footer-grid,
+      .dashboard-preview,
+      .architecture,
+      .plans,
+      .grid-4,
+      .templates,
+      .flow,
+      .grid-3,
+      .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .sidebar { min-height: auto; }
+    }
+
+    @media (max-width: 820px) {
+      .nav-links, .actions { display: none; }
+      .mobile-toggle { display: inline-grid; place-items: center; }
+      .mobile-menu.open { display: block; }
+      .hero,
+      .stats,
+      .screen-body,
+      .dashboard-top,
+      .editor-grid,
+      .footer-grid,
+      .dashboard-preview,
+      .architecture,
+      .plans,
+      .grid-4,
+      .templates,
+      .flow,
+      .grid-3,
+      .dashboard-grid,
+      .form-grid,
+      .kpi {
+        grid-template-columns: 1fr;
+      }
+      .hero { padding-top: 42px; }
+      .hero h1 { font-size: 40px; }
+      .section-head h2 { font-size: 30px; }
+      .btn { width: 100%; }
+      .hero-cta { flex-direction: column; }
+      .sidebar { order: 2; }
+      .dashboard-main { order: 1; }
+      .container { width: min(calc(100% - 20px), var(--max)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="glow three"></div>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="container">
+        <nav class="nav">
+          <div class="brand">
+            <div class="brand-badge">✦</div>
+            <div>
+              <div>Viral Studio AI</div>
+              <small class="muted">Criação inteligente de vídeos virais</small>
+            </div>
+          </div>
+
+          <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#recursos">Recursos</a>
+            <a href="#painel">Painel</a>
+            <a href="#templates">Templates</a>
+            <a href="#planos">Planos</a>
+            <a href="#arquitetura">Arquitetura</a>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-secondary">Entrar</button>
+            <button class="btn btn-primary">Criar Vídeo Agora</button>
+          </div>
+
+          <button class="mobile-toggle" id="mobileToggle">☰</button>
+        </nav>
+
+        <div class="mobile-menu" id="mobileMenu">
+          <a href="#home">Home</a>
+          <a href="#recursos">Recursos</a>
+          <a href="#painel">Painel</a>
+          <a href="#templates">Templates</a>
+          <a href="#planos">Planos</a>
+          <a href="#arquitetura">Arquitetura</a>
+          <div class="separator"></div>
+          <a href="#">Entrar</a>
+          <a href="#">Criar Vídeo Agora</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="home">
+      <section>
+        <div class="container hero">
+          <div>
+            <div class="chip"><span class="dot"></span> Plataforma premium para TikTok, Reels, Shorts, Kwai e Facebook</div>
+            <h1><span class="gradient-text">Crie vídeos virais em minutos com IA.</span></h1>
+            <p>Transforme roteiros, ideias e referências em vídeos originais, profissionais e prontos para postar. Uma plataforma completa para gerar cenas, narração, legendas, hashtags, títulos, thumbnail e versões otimizadas para cada rede social.</p>
+
+            <div class="hero-cta">
+              <button class="btn btn-primary">Criar Vídeo Agora</button>
+              <button class="btn btn-secondary">Analisar Vídeo de Referência</button>
+            </div>
+
+            <div class="stats">
+              <div class="stat-card">
+                <strong>3 modos</strong>
+                <span>Rápido, Profissional e Inspiração por Referência</span>
+              </div>
+              <div class="stat-card">
+                <strong>12 nichos</strong>
+                <span>Templates prontos para conteúdo que performa</span>
+              </div>
+              <div class="stat-card">
+                <strong>3 idiomas</strong>
+                <span>Português, Inglês e Espanhol com troca instantânea</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-card">
+            <div class="screen-bar">
+              <div class="traffic"><i></i><i></i><i></i></div>
+              <div class="chip">Reference Analyzer • Smart Remix • Hook Generator</div>
+            </div>
+            <div class="screen-body">
+              <div class="mini-card">
+                <div class="mini-title">Script to Video</div>
+                <div class="line lg"></div>
+                <div class="line md"></div>
+                <div class="line alt lg"></div>
+                <div class="line sm"></div>
+              </div>
+              <div class="mini-card">
+                <div class="mini-title">Viral Flow Editor</div>
+                <div class="line lg"></div>
+                <div class="line alt md"></div>
+                <div class="line md"></div>
+                <div class="line sm"></div>
+              </div>
+              <div class="mini-card">
+                <div class="mini-title">Auto Caption Pro</div>
+                <div class="line md"></div>
+                <div class="line lg"></div>
+                <div class="line alt sm"></div>
+              </div>
+              <div class="mini-card">
+                <div class="mini-title">Smart Voice Lab</div>
+                <div class="line alt lg"></div>
+                <div class="line md"></div>
+                <div class="line sm"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="beneficios">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Benefícios principais</div>
+              <h2>Menos esforço manual. Mais impacto visual e performance.</h2>
+            </div>
+            <p>Projetada para iniciantes e criadores avançados, a plataforma simplifica a produção com poucos passos e mantém profundidade total para quem quer controlar cada detalhe do vídeo.</p>
+          </div>
+
+          <div class="grid-4">
+            <article class="feature-card">
+              <div class="icon-box">⚡</div>
+              <h3>Criação ultra rápida</h3>
+              <p>Digite um tema ou cole um roteiro e gere um vídeo pronto com narração, cenas, legendas e CTA em poucos cliques.</p>
+            </article>
+            <article class="feature-card">
+              <div class="icon-box">🎯</div>
+              <h3>Foco em viralização</h3>
+              <p>Gancho inicial, ritmo, cortes dinâmicos, transições e estrutura pensados para retenção e conversão.</p>
+            </article>
+            <article class="feature-card">
+              <div class="icon-box">🧠</div>
+              <h3>Análise estratégica</h3>
+              <p>Use vídeos públicos como referência analítica para criar novos conteúdos originais mais fortes para sua marca.</p>
+            </article>
+            <article class="feature-card">
+              <div class="icon-box">🌍</div>
+              <h3>Idioma inteligente</h3>
+              <p>Troque entre Português, Inglês e Espanhol e aplique o idioma em voz, roteiro, legendas, título e hashtags.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="recursos">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Recursos da plataforma</div>
+              <h2>Ferramentas centrais do produto</h2>
+            </div>
+            <p>Uma arquitetura pensada para permitir criação por roteiro, criação por tema, remakes originais por referência, biblioteca de vozes, otimização automática e edição básica manual.</p>
+          </div>
+
+          <div class="grid-3">
+            <article class="panel-card">
+              <div class="icon-box">📝</div>
+              <h3>Script to Video</h3>
+              <p>Recebe o roteiro, divide em cenas, organiza a sequência visual, gera narração e sincroniza o áudio com o vídeo final.</p>
+              <div class="tag-row"><span class="tag">cenas automáticas</span><span class="tag">legendas</span><span class="tag">ritmo</span></div>
+            </article>
+            <article class="panel-card">
+              <div class="icon-box">💡</div>
+              <h3>Theme to Video</h3>
+              <p>Crie vídeos apenas digitando um tema como curiosidade, motivação, gospel, humor, notícia, produto ou venda.</p>
+              <div class="tag-row"><span class="tag">gancho viral</span><span class="tag">título</span><span class="tag">CTA</span></div>
+            </article>
+            <article class="panel-card">
+              <div class="icon-box">🔍</div>
+              <h3>Reference Analyzer</h3>
+              <p>Analisa estrutura, tempo de cena, emoção, narração, CTA, ritmo e estilo de edição para inspirar um novo conteúdo original.</p>
+              <div class="tag-row"><span class="tag">sem copiar</span><span class="tag">smart remix</span><span class="tag">estratégia</span></div>
+            </article>
+            <article class="panel-card">
+              <div class="icon-box">🎙️</div>
+              <h3>Smart Voice Lab</h3>
+              <p>Biblioteca com vozes femininas, masculinas, emocionais, dramáticas, curtas, motivacionais e comerciais por idioma.</p>
+              <div class="tag-row"><span class="tag">prévia</span><span class="tag">velocidade</span><span class="tag">emoção</span></div>
+            </article>
+            <article class="panel-card">
+              <div class="icon-box">🏷️</div>
+              <h3>Auto Caption Pro</h3>
+              <p>Gera legendas automáticas, título otimizado, descrição curta, descrição longa, hashtags e palavras-chave do nicho.</p>
+              <div class="tag-row"><span class="tag">caption</span><span class="tag">hashtags</span><span class="tag">descrição</span></div>
+            </article>
+            <article class="panel-card">
+              <div class="icon-box">🖼️</div>
+              <h3>Thumbnail Engine</h3>
+              <p>Cria thumbnails impactantes com estilo de nicho, texto forte, composição premium e visual otimizado para clique.</p>
+              <div class="tag-row"><span class="tag">CTR</span><span class="tag">texto forte</span><span class="tag">thumbnail</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="fluxo">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Fluxo do usuário</div>
+              <h2>Experiência simples, rápida e pronta para mobile</h2>
+            </div>
+            <p>O produto foi desenhado para gerar vídeos em poucos passos, com interface clara, botões grandes, menus diretos e telas organizadas para funcionar muito bem no celular.</p>
+          </div>
+
+          <div class="flow">
+            <article class="stage-card">
+              <small>Etapa 01</small>
+              <h3>Escolha o modo</h3>
+              <p>Rápido, Profissional ou Inspiração por Referência.</p>
+            </article>
+            <article class="stage-card">
+              <small>Etapa 02</small>
+              <h3>Defina entrada</h3>
+              <p>Cole um roteiro, digite um tema ou envie um link público para análise estratégica.</p>
+            </article>
+            <article class="stage-card">
+              <small>Etapa 03</small>
+              <h3>Personalize</h3>
+              <p>Escolha idioma, duração, formato, voz, estilo visual, música e energia.</p>
+            </article>
+            <article class="stage-card">
+              <small>Etapa 04</small>
+              <h3>Renderize e publique</h3>
+              <p>Receba vídeo, título, legenda, CTA, hashtags, thumbnail e exportação.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="painel">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Protótipo do painel</div>
+              <h2>Dashboard premium com foco em produção diária</h2>
+            </div>
+            <p>O painel centraliza projetos, scripts, vozes, legendas, hashtags, referências analisadas, templates e exportações em uma navegação lateral clara e intuitiva.</p>
+          </div>
+
+          <div class="dashboard-preview">
+            <aside class="sidebar">
+              <div class="brand" style="margin-bottom: 10px;">
+                <div class="brand-badge">V</div>
+                <div>
+                  <div>Viral Studio</div>
+                  <small class="muted">Painel do usuário</small>
+                </div>
+              </div>
+              <div class="menu-title">Workspace</div>
+              <a class="menu-item active" href="#"><span>🏠</span>Dashboard</a>
+              <a class="menu-item" href="#"><span>➕</span>Novo Vídeo</a>
+              <a class="menu-item" href="#"><span>🎬</span>Vídeos Criados</a>
+              <a class="menu-item" href="#"><span>📝</span>Roteiros</a>
+              <a class="menu-item" href="#"><span>🎙️</span>Áudios / Vozes</a>
+              <a class="menu-item" href="#"><span>🏷️</span>Hashtags e Legendas</a>
+              <a class="menu-item" href="#"><span>🔍</span>Análise de Referências</a>
+              <a class="menu-item" href="#"><span>⚙️</span>Configurações</a>
+              <div class="menu-title">Planos</div>
+              <a class="menu-item" href="#"><span>💎</span>Upgrade Premium</a>
+            </aside>
+
+            <div class="dashboard-main">
+              <div class="dashboard-top">
+                <article class="dashboard-card">
+                  <div class="chip"><span class="dot"></span> Dashboard moderno</div>
+                  <h3 style="margin-top:14px;">Controle total da produção viral</h3>
+                  <p>Crie novos vídeos, acompanhe projetos, refaça conteúdos com um clique e otimize a performance com dados de ritmo, retenção e CTA.</p>
+                  <div class="kpi">
+                    <div><strong>128</strong><span class="muted">projetos</span></div>
+                    <div><strong>42</strong><span class="muted">vídeos gerados</span></div>
+                    <div><strong>89%</strong><span class="muted">score criativo</span></div>
+                  </div>
+                </article>
+
+                <article class="dashboard-card">
+                  <h3>Exportação rápida</h3>
+                  <p>Baixa, média e alta qualidade, com troca de formato e reprocessamento instantâneo.</p>
+                  <div class="list">
+                    <div class="list-item"><span>9:16 • Reels / Shorts</span><span class="pill">Pronto</span></div>
+                    <div class="list-item"><span>16:9 • YouTube / Facebook</span><span class="pill warning">Processando</span></div>
+                    <div class="list-item"><span>1:1 • Feed</span><span class="pill">Disponível</span></div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="dashboard-grid">
+                <article class="dashboard-card">
+                  <h3>Projetos recentes</h3>
+                  <p>Histórico organizado por nicho, idioma e canal de publicação.</p>
+                  <div class="list">
+                    <div class="list-item"><span>Curiosidade • PT-BR • 30s</span><span class="pill">Publicado</span></div>
+                    <div class="list-item"><span>Gospel • EN • 60s</span><span class="pill">Salvo</span></div>
+                    <div class="list-item"><span>Storytelling • ES • 45s</span><span class="pill warning">Editar</span></div>
+                  </div>
+                </article>
+                <article class="dashboard-card">
+                  <h3>Inteligência de ritmo</h3>
+                  <p>Detector de ritmo fraco, pontos de queda e sugestões para melhorar retenção.</p>
+                  <div class="tag-row"><span class="tag">gancho fraco</span><span class="tag">CTA ausente</span><span class="tag">cenas longas</span></div>
+                </article>
+                <article class="dashboard-card">
+                  <h3>Biblioteca criativa</h3>
+                  <p>Templates virais por nicho, modelos favoritos e estruturas reutilizáveis.</p>
+                  <div class="tag-row"><span class="tag">curiosidades</span><span class="tag">gospel</span><span class="tag">humor</span></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="criador-roteiro">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Criador por roteiro e tema</div>
+              <h2>Tela central de geração de vídeo</h2>
+            </div>
+            <p>O editor foi planejado com duas entradas principais: roteiro ou tema. A partir disso o sistema gera automaticamente cenas, locução, cortes, transições, legendas e assets de publicação.</p>
+          </div>
+
+          <div class="editor-grid">
+            <article class="form-card">
+              <h3>Criador por roteiro</h3>
+              <p>Cole o roteiro e personalize toda a geração.</p>
+              <div class="form-grid">
+                <textarea class="textarea" style="grid-column: 1 / -1" placeholder="Cole seu roteiro aqui..."></textarea>
+                <select class="select"><option>30 segundos</option><option>60 segundos</option><option>90 segundos</option><option>2 minutos</option></select>
+                <select class="select"><option>9:16</option><option>16:9</option><option>1:1</option><option>4:5</option></select>
+                <select class="select"><option>Português</option><option>English</option><option>Español</option></select>
+                <select class="select"><option>Retro futurista</option><option>Cinemático</option><option>Minimalista</option></select>
+                <select class="select"><option>Voz feminina energética</option><option>Voz masculina forte</option><option>Voz storytelling</option></select>
+                <select class="select"><option>Música motivacional</option><option>Música épica</option><option>Música viral curta</option></select>
+                <select class="select"><option>Energia alta</option><option>Energia média</option><option>Energia baixa</option></select>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary">Gerar Vídeo Automaticamente</button>
+                <button class="btn btn-secondary">Salvar como Modelo</button>
+              </div>
+            </article>
+
+            <article class="form-card">
+              <h3>Criador por tema</h3>
+              <p>Digite uma ideia e deixe a IA montar tudo.</p>
+              <div class="form-grid">
+                <input class="input" style="grid-column: 1 / -1" placeholder="Ex: história bíblica sobre José com pegada emocional" />
+                <select class="select"><option>Modo rápido</option><option>Modo profissional</option><option>Inspiração por referência</option></select>
+                <select class="select"><option>Curiosidade</option><option>Motivação</option><option>Gospel</option><option>Humor</option></select>
+                <select class="select"><option>Gancho forte</option><option>Gancho curioso</option><option>Gancho emocional</option></select>
+                <select class="select"><option>Português</option><option>English</option><option>Español</option></select>
+                <select class="select"><option>45 segundos</option><option>60 segundos</option><option>90 segundos</option></select>
+                <select class="select"><option>9:16</option><option>4:5</option><option>1:1</option></select>
+                <select class="select"><option>Visual premium</option><option>Visual neon</option><option>Visual clean</option></select>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary">Gerar Roteiro + Vídeo</button>
+                <button class="btn btn-secondary">Ver Sugestões Virais</button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="analise-referencia">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Smart Remix</div>
+              <h2>Ferramenta de análise de vídeo de referência</h2>
+            </div>
+            <p>Ao colar um link público, o sistema não replica o conteúdo. Ele faz leitura estratégica da performance criativa e usa essa base para gerar um novo vídeo original, mais bonito e mais profissional.</p>
+          </div>
+
+          <div class="grid-3">
+            <article class="panel-card">
+              <h3>O que a IA identifica</h3>
+              <p>Gancho inicial, tempo médio de cenas, estilo de edição, narração, emoção, ritmo, CTA, legenda, pontos de atenção e elementos de viralização.</p>
+              <div class="tag-row"><span class="tag">hook</span><span class="tag">ritmo</span><span class="tag">edição</span><span class="tag">emoção</span></div>
+            </article>
+            <article class="panel-card">
+              <h3>O que o sistema entrega</h3>
+              <p>Relatório inteligente, melhorias sugeridas, roteiro novo, estrutura nova, legenda pronta, hashtags, título otimizado e thumbnail inicial.</p>
+              <div class="tag-row"><span class="tag">relatório</span><span class="tag">novo roteiro</span><span class="tag">hashtags</span></div>
+            </article>
+            <article class="panel-card">
+              <h3>Regra de originalidade</h3>
+              <p>O resultado deve ser original, inspirado na estratégia do vídeo analisado, mas sem reprodução exata do conteúdo de terceiros.</p>
+              <div class="tag-row"><span class="tag">criatividade</span><span class="tag">segurança</span><span class="tag">marca própria</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="templates">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Nichos prontos</div>
+              <h2>Biblioteca de templates virais por nicho</h2>
+            </div>
+            <p>Modelos reutilizáveis com estilo visual, estrutura narrativa, ritmo e CTA sugeridos para acelerar a criação diária.</p>
+          </div>
+
+          <div class="templates">
+            <article class="template-card"><h3>Curiosidades</h3><p>Hooks rápidos, cortes curtos e sensação de descoberta.</p></article>
+            <article class="template-card"><h3>Gospel</h3><p>Emoção, atmosfera espiritual, narrativa forte e CTA de conexão.</p></article>
+            <article class="template-card"><h3>Motivacional</h3><p>Frases de impacto, narração poderosa e final memorável.</p></article>
+            <article class="template-card"><h3>Vendas</h3><p>Oferta clara, prova visual, urgência e CTA comercial.</p></article>
+            <article class="template-card"><h3>Produtos</h3><p>Demonstração prática, close visual e benefício imediato.</p></article>
+            <article class="template-card"><h3>Humor</h3><p>Timing rápido, punchline forte e repetição alta.</p></article>
+            <article class="template-card"><h3>Educação</h3><p>Explicação dinâmica, retenção visual e organização simples.</p></article>
+            <article class="template-card"><h3>Storytelling</h3><p>Construção emocional, cenas progressivas e final forte.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="planos">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Estrutura de planos</div>
+              <h2>Modelo pronto para vender e escalar</h2>
+            </div>
+            <p>O produto pode trabalhar com assinatura mensal e também sistema de créditos para renderizações premium, vozes avançadas e exports em alta qualidade.</p>
+          </div>
+
+          <div class="plans">
+            <article class="plan">
+              <h3>Start</h3>
+              <p>Para quem está começando a criar vídeos com IA.</p>
+              <div class="price">R$49</div>
+              <small class="muted">por mês</small>
+              <ul>
+                <li>Modo rápido</li>
+                <li>Até 30 vídeos por mês</li>
+                <li>Formatos básicos</li>
+                <li>Hashtags e legendas</li>
+              </ul>
+            </article>
+            <article class="plan featured">
+              <div class="chip">Mais escolhido</div>
+              <h3>Pro</h3>
+              <p>Para criadores que publicam com frequência e querem mais controle.</p>
+              <div class="price">R$129</div>
+              <small class="muted">por mês</small>
+              <ul>
+                <li>Modo profissional</li>
+                <li>Reference Analyzer</li>
+                <li>Vozes premium</li>
+                <li>Thumbnail automática</li>
+                <li>Exportação em alta</li>
+              </ul>
+            </article>
+            <article class="plan">
+              <h3>Scale</h3>
+              <p>Para agências, equipes e marcas com produção intensiva.</p>
+              <div class="price">R$299</div>
+              <small class="muted">por mês</small>
+              <ul>
+                <li>Projetos ilimitados</li>
+                <li>Fila prioritária</li>
+                <li>Templates privados</li>
+                <li>Multiusuário</li>
+                <li>API futura</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Perguntas frequentes</div>
+              <h2>FAQ da landing page</h2>
+            </div>
+            <p>Textos iniciais para a versão pública do produto e para apresentação comercial.</p>
+          </div>
+
+          <div class="faq">
+            <article class="faq-item">
+              <h3>O app copia vídeos de referência?</h3>
+              <p>Não. O sistema usa referências públicas apenas para análise estratégica e criação de um novo conteúdo original inspirado em estrutura, ritmo e abordagem.</p>
+            </article>
+            <article class="faq-item">
+              <h3>Quais idiomas estão disponíveis?</h3>
+              <p>Português, Inglês e Espanhol, com possibilidade de expansão futura. O idioma escolhido é aplicado em roteiro, narração, legendas, títulos, descrições, hashtags e CTA.</p>
+            </article>
+            <article class="faq-item">
+              <h3>Posso criar vídeos para redes diferentes?</h3>
+              <p>Sim. O sistema permite formatos como 9:16, 16:9, 1:1 e 4:5, além de presets para Reels, Shorts, TikTok, YouTube e outras plataformas.</p>
+            </article>
+            <article class="faq-item">
+              <h3>Existe modo simples e modo avançado?</h3>
+              <p>Sim. O modo rápido reduz o fluxo a poucos passos. O modo profissional libera edição cena por cena, voz, ritmo, legenda, estilo e intensidade.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="arquitetura">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Arquitetura do sistema</div>
+              <h2>Versão pronta para desenvolvimento</h2>
+            </div>
+            <p>Estrutura sugerida para um produto escalável com renderização assíncrona, autenticação segura, armazenamento de mídia e integração futura com APIs de voz, imagem e vídeo por IA.</p>
+          </div>
+
+          <div class="architecture">
+            <article class="panel-card">
+              <div class="icon-box">🖥️</div>
+              <h3>Frontend</h3>
+              <p>SPA responsiva com landing page, dashboard, criador de vídeo, editor básico, histórico, configurações e biblioteca de templates.</p>
+            </article>
+            <article class="panel-card">
+              <div class="icon-box">⚙️</div>
+              <h3>Backend</h3>
+              <p>API com autenticação, gerenciamento de projetos, fila de renderização, serviço de prompts e orquestração das tarefas de mídia.</p>
+            </article>
+            <article class="panel-card">
+              <div class="icon-box">🗄️</div>
+              <h3>Banco de dados</h3>
+              <p>Tabelas para usuários, assinaturas, créditos, projetos, cenas, vozes, exports, templates, analytics e referências analisadas.</p>
+            </article>
+            <article class="panel-card">
+              <div class="icon-box">☁️</div>
+              <h3>Infraestrutura</h3>
+              <p>Storage de vídeos, CDN, fila para renderização, workers dedicados para mídia e integração futura com provedores multimodais.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="nomes">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="chip"><span class="dot"></span> Naming e identidade visual</div>
+              <h2>Sugestões de nome da plataforma</h2>
+            </div>
+            <p>Nomes fortes, fáceis de memorizar e adequados para um produto premium de criação audiovisual com IA.</p>
+          </div>
+
+          <div class="grid-4">
+            <article class="panel-card"><h3>Viral Studio AI</h3><p>Nome central, premium, direto e vendável.</p></article>
+            <article class="panel-card"><h3>Neon Viral Lab</h3><p>Mais futurista, visual e tecnológico.</p></article>
+            <article class="panel-card"><h3>Remix Flow</h3><p>Curto, moderno e forte para branding.</p></article>
+            <article class="panel-card"><h3>HookFrame AI</h3><p>Focado em gancho, estrutura e vídeo.</p></article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-grid">
+        <div>
+          <div class="brand" style="margin-bottom:12px;">
+            <div class="brand-badge">✦</div>
+            <div>Viral Studio AI</div>
+          </div>
+          <p class="muted">Crie vídeos virais em minutos com IA. Transforme roteiros, ideias e referências em vídeos originais, profissionais e prontos para postar.</p>
+        </div>
+        <div>
+          <strong>Produto</strong>
+          <p class="muted">Criador por roteiro<br>Theme to Video<br>Reference Analyzer<br>Voice Lab</p>
+        </div>
+        <div>
+          <strong>Empresa</strong>
+          <p class="muted">Sobre<br>Planos<br>Parceiros<br>Atualizações</p>
+        </div>
+        <div>
+          <strong>Suporte</strong>
+          <p class="muted">FAQ<br>Contato<br>Política de uso<br>Termos</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    });
+  </script>
+</body>
+</html>

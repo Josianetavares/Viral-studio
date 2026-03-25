@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Blink UI Theme CSS
+   REQUIRED for @blinkdotnew/ui components to render correctly.
+   ───────────────────────────────────────────────────────────────────────────── */
+@import '@blinkdotnew/ui/styles';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+/* ── Viral Studio Pro — Retro-Futuristic Palette ─────────────────────────── */
+:root {
+  --background: 222 47% 5%;
+  --foreground: 220 20% 92%;
+  --card: 222 40% 9%;
+  --card-foreground: 220 20% 92%;
+  --popover: 222 40% 9%;
+  --popover-foreground: 220 20% 92%;
+
+  /* Neon Purple — primary */
+  --primary: 270 91% 65%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Cyan — secondary */
+  --secondary: 195 100% 45%;
+  --secondary-foreground: 222 47% 5%;
+
+  --muted: 222 30% 14%;
+  --muted-foreground: 220 15% 55%;
+
+  /* Hot Pink — accent */
+  --accent: 320 100% 58%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 270 30% 18%;
+  --input: 222 35% 12%;
+  --ring: 270 91% 65%;
+
+  /* Charts */
+  --chart-1: 270 91% 65%;
+  --chart-2: 195 100% 45%;
+  --chart-3: 320 100% 58%;
+  --chart-4: 45 100% 60%;
+  --chart-5: 140 70% 50%;
+
+  /* Sidebar */
+  --sidebar: 222 47% 7%;
+  --sidebar-foreground: 220 20% 85%;
+  --sidebar-primary: 270 91% 65%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 270 30% 15%;
+  --sidebar-accent-foreground: 220 20% 92%;
+  --sidebar-border: 270 30% 12%;
+  --sidebar-ring: 270 91% 65%;
+
+  /* Fonts */
+  --font-sans: 'Space Grotesk', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Shadows */
+  --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.3);
+  --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.3);
+  --shadow-sm: 0px 4px 12px -1px hsl(0 0% 0% / 0.4);
+  --shadow: 0px 8px 24px -4px hsl(0 0% 0% / 0.4);
+  --shadow-md: 0px 8px 24px -4px hsl(0 0% 0% / 0.4);
+  --shadow-lg: 0px 16px 40px -8px hsl(0 0% 0% / 0.5);
+  --shadow-xl: 0px 24px 60px -12px hsl(0 0% 0% / 0.6);
+  --shadow-2xl: 0px 32px 80px -16px hsl(0 0% 0% / 0.7);
+  --shadow-card: 0px 8px 24px -4px hsl(0 0% 0% / 0.4);
+
+  /* Radii */
+  --radius: 0.5rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Misc */
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+}
+
+/* Dark mode aliases (this app is always dark) */
+:root.dark,
+.theme-linear.dark,
+.theme-glass.dark,
+.theme-midnight.dark,
+.theme-minimal.dark {
+  --background: 222 47% 5%;
+  --foreground: 220 20% 92%;
+  --card: 222 40% 9%;
+  --card-foreground: 220 20% 92%;
+  --popover: 222 40% 9%;
+  --popover-foreground: 220 20% 92%;
+  --primary: 270 91% 65%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 195 100% 45%;
+  --secondary-foreground: 222 47% 5%;
+  --muted: 222 30% 14%;
+  --muted-foreground: 220 15% 55%;
+  --accent: 320 100% 58%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 270 30% 18%;
+  --input: 222 35% 12%;
+  --ring: 270 91% 65%;
+  --chart-1: 270 91% 65%;
+  --chart-2: 195 100% 45%;
+  --chart-3: 320 100% 58%;
+  --chart-4: 45 100% 60%;
+  --chart-5: 140 70% 50%;
+  --sidebar: 222 47% 7%;
+  --sidebar-foreground: 220 20% 85%;
+  --sidebar-primary: 270 91% 65%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 270 30% 15%;
+  --sidebar-accent-foreground: 220 20% 92%;
+  --sidebar-border: 270 30% 12%;
+  --sidebar-ring: 270 91% 65%;
+}
+
+/* ── Custom Utility Classes ─────────────────────────────────────────────────── */
+@layer components {
+  /* Glassy cards */
+  .card-glass {
+    background: hsl(222 40% 9% / 0.85);
+    border: 1px solid hsl(270 60% 35% / 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-lg);
+  }
+
+  .card-glass-cyan {
+    background: hsl(222 40% 9% / 0.85);
+    border: 1px solid hsl(195 100% 45% / 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-lg);
+  }
+
+  .card-glass-pink {
+    background: hsl(222 40% 9% / 0.85);
+    border: 1px solid hsl(320 100% 58% / 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Neon glow effects */
+  .neon-glow-purple {
+    box-shadow: 0 0 20px hsl(270 91% 65% / 0.3), 0 0 60px hsl(270 91% 65% / 0.15);
+  }
+
+  .neon-glow-cyan {
+    box-shadow: 0 0 20px hsl(195 100% 45% / 0.35), 0 0 60px hsl(195 100% 45% / 0.15);
+  }
+
+  .neon-glow-pink {
+    box-shadow: 0 0 20px hsl(320 100% 58% / 0.35), 0 0 60px hsl(320 100% 58% / 0.15);
+  }
+
+  /* Gradient texts */
+  .gradient-text-primary {
+    background: linear-gradient(135deg, hsl(270 91% 65%), hsl(320 100% 58%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-cyber {
+    background: linear-gradient(135deg, hsl(195 100% 45%), hsl(270 91% 65%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Neon buttons */
+  .btn-neon {
+    background: linear-gradient(135deg, hsl(270 91% 65%), hsl(320 100% 58%));
+    color: hsl(0 0% 100%);
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 20px hsl(270 91% 65% / 0.4);
+  }
+
+  .btn-neon:hover {
+    box-shadow: 0 0 30px hsl(270 91% 65% / 0.6), 0 0 60px hsl(270 91% 65% / 0.3);
+    transform: translateY(-1px);
+  }
+
+  .btn-neon:active {
+    transform: translateY(0);
+  }
+
+  .btn-neon-outline {
+    background: transparent;
+    color: hsl(270 91% 75%);
+    border: 1px solid hsl(270 91% 65% / 0.6);
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .btn-neon-outline:hover {
+    background: hsl(270 91% 65% / 0.1);
+    border-color: hsl(270 91% 65%);
+    box-shadow: 0 0 20px hsl(270 91% 65% / 0.25);
+  }
+
+  /* Colored text */
+  .text-neon-purple {
+    color: hsl(270 91% 72%);
+  }
+
+  .text-neon-cyan {
+    color: hsl(195 100% 55%);
+  }
+
+  .text-neon-pink {
+    color: hsl(320 100% 68%);
+  }
+
+  /* Grid background pattern */
+  .bg-grid-pattern {
+    background-image:
+      linear-gradient(hsl(270 91% 65% / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(270 91% 65% / 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+/* ── Animations ──────────────────────────────────────────────────────────────── */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out both;
+}
+
+.animate-slide-up-delay-1 {
+  animation: slideUp 0.6s 0.1s ease-out both;
+}
+
+.animate-slide-up-delay-2 {
+  animation: slideUp 0.6s 0.2s ease-out both;
+}
+
+.animate-slide-up-delay-3 {
+  animation: slideUp 0.6s 0.3s ease-out both;
+}
+
+.animate-slide-up-delay-4 {
+  animation: slideUp 0.6s 0.45s ease-out both;
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+@keyframes scanlineMove {
+  0% { top: -4px; }
+  100% { top: 100%; }
+}
+
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, hsl(270 91% 65% / 0.25), transparent);
+  animation: scanlineMove 3.5s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(270 91% 65% / 0.3), 0 0 60px hsl(270 91% 65% / 0.1);
+  }
+
+  50% {
+    box-shadow: 0 0 30px hsl(270 91% 65% / 0.5), 0 0 80px hsl(270 91% 65% / 0.2);
+  }
+}
+
+.animate-neon-pulse {
+  animation: neonPulse 2.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
